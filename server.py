@@ -8,6 +8,8 @@ import sys
 
 from predict import predict
 
+import numpy as np
+
 
 TEMPLATE_PATH.insert(0, os.path.abspath(os.path.dirname(__file__)))
 
@@ -34,7 +36,9 @@ def wave():
     # json.dump(paths, open('paths.json', 'w'))
     # print(paths)
 
-    print(predict(paths))
+    params = predict(paths)
+    print(params)
+    np.save('midi/params.npy', params)
 
     return {'success': True}
 
