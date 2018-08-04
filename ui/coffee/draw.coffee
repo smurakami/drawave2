@@ -6,6 +6,12 @@ class Path
     @mode = mode
     @data = []
 
+  toDict: ->
+    return {
+      mode: @mode,
+      data: @data
+    }
+
 
 class Main
   constructor: -> 
@@ -29,6 +35,8 @@ class Main
       @mode = 'draw'
     $('#buttons .erase').click =>
       @mode = 'erase'
+    $('#buttons .send').click =>
+      @send()
 
   mousedown: (e) ->
     console.log('mousedown')
@@ -92,5 +100,17 @@ class Main
 
       ctx.stroke()
 
+  send: ->
+    paths = (path.toDict() for path in @paths)
+    $.ajax
+      type: 'POST'
+      url: '/wave'
+      data: 'data=' + JSON.stringify(paths)
+      success: -> console.log 'success'
+      error: (e) -> console.log(e)
+
+
+
 $ ->
   window.main = new Main
+

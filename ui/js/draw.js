@@ -13,6 +13,13 @@
       this.data = [];
     }
 
+    Path.prototype.toDict = function() {
+      return {
+        mode: this.mode,
+        data: this.data
+      };
+    };
+
     return Path;
 
   })();
@@ -39,6 +46,11 @@
       $('#buttons .erase').click((function(_this) {
         return function() {
           return _this.mode = 'erase';
+        };
+      })(this));
+      $('#buttons .send').click((function(_this) {
+        return function() {
+          return _this.send();
         };
       })(this));
     }
@@ -120,6 +132,31 @@
         results.push(ctx.stroke());
       }
       return results;
+    };
+
+    Main.prototype.send = function() {
+      var path, paths;
+      paths = (function() {
+        var i, len, ref, results;
+        ref = this.paths;
+        results = [];
+        for (i = 0, len = ref.length; i < len; i++) {
+          path = ref[i];
+          results.push(path.toDict());
+        }
+        return results;
+      }).call(this);
+      return $.ajax({
+        type: 'POST',
+        url: '/wave',
+        data: 'data=' + JSON.stringify(paths),
+        success: function() {
+          return console.log('success');
+        },
+        error: function(e) {
+          return console.log(e);
+        }
+      });
     };
 
     return Main;

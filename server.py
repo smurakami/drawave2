@@ -6,6 +6,8 @@ import os
 import requests
 import sys
 
+from predict import predict
+
 
 TEMPLATE_PATH.insert(0, os.path.abspath(os.path.dirname(__file__)))
 
@@ -15,24 +17,26 @@ params = Params()
 
 @route('/')
 def index():
-    return template('index')
+    return template('./ui/index')
 
 @route('/draw')
 def draw():
-    return template('draw')
+    return template('./ui/draw')
 
 @route('/<filepath:path>')
 def assets(filepath):
-    return static_file(filepath, root='.')
+    return static_file(filepath, root='./ui')
 
-@route('/song', method='get')
-def song():
-    if params.generator is None:
-        params.generator = Generator()
+@route('/wave', method='POST')
+def wave():
+    paths = json.loads(request.params.get('data'))
 
-    lyrics, filename =  params.generator.generate()
+    # json.dump(paths, open('paths.json', 'w'))
+    # print(paths)
 
-    return {'lyrics': lyrics, 'filename': filename}
+    print(predict(paths))
+
+    return {'success': True}
 
 
 if __name__ == '__main__':
