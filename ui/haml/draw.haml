@@ -1,0 +1,28 @@
+!!!
+%html{:lang => "en"}
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %meta{:charset => "utf-8"}/
+    %meta{:content => "width=device-width, initial-scale=1, shrink-to-fit=no", :name => "viewport"}/
+    %meta{:content => "", :name => "description"}/
+    %meta{:content => "", :name => "author"}/
+    %link{:href => "favicon.ico", :rel => "icon"}/
+    %title DRAW
+    / Bootstrap core CSS
+    %link{:href => "css/bootstrap.min.css", :rel => "stylesheet"}/
+    %link{:href => "css/draw.css", :rel => "stylesheet"}/
+  %body
+    #main.container
+      %canvas#canvas{ width: 640, height: 640 }
+
+      #buttons
+        .draw.btn.btn-primary
+          DRAW
+        .erase.btn.btn-danger
+          ERASE
+
+    %script{:src => "js/jquery.min.js"}
+    %script{:src => "js/popper.min.js"}
+    %script{:src => "js/bootstrap.min.js"}
+    %script{:src => "js/draw.js"}
+

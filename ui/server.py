@@ -17,6 +17,10 @@ params = Params()
 def index():
     return template('index')
 
+@route('/draw')
+def draw():
+    return template('draw')
+
 @route('/<filepath:path>')
 def assets(filepath):
     return static_file(filepath, root='.')
