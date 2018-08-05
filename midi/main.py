@@ -114,6 +114,11 @@ while True:
 
             file_to_play = '../sounds/' + files_interp[index]
 
+            subprocess.Popen([
+                'play',
+                file_to_play])
+
+
             timestamp = timestamp_
     except:
         print('some error request')
