@@ -16,6 +16,10 @@ class Path
 class Main
   constructor: -> 
     @canvas = document.getElementById 'canvas'
+    width = $(window).width()
+    height = $(window).height()
+    
+
     @context = @canvas.getContext('2d')
 
     @canvas.addEventListener 'mousedown', @mousedown.bind(this), false
@@ -61,6 +65,10 @@ class Main
     pos = $(@canvas).position()
     x = e.clientX - pos.left
     y = e.clientY - pos.top
+
+    x *= 640 / $(window).width()
+    y *= 640 / $(window).width()
+
     if @isDrawing
       @path.data.push([x, y])
     @draw()
@@ -86,8 +94,13 @@ class Main
     try 
       touch = e.touches[0];
       pos = $(@canvas).position()
+
       x = touch.clientX - pos.left
       y = touch.clientY - pos.top
+      
+      x *= 640 / $(window).width()
+      y *= 640 / $(window).width()
+
       if @isDrawing
         @path.data.push([x, y])
       @draw()

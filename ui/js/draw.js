@@ -26,7 +26,10 @@
 
   Main = (function() {
     function Main() {
+      var height, width;
       this.canvas = document.getElementById('canvas');
+      width = $(window).width();
+      height = $(window).height();
       this.context = this.canvas.getContext('2d');
       this.canvas.addEventListener('mousedown', this.mousedown.bind(this), false);
       this.canvas.addEventListener('mouseup', this.mouseup.bind(this), false);
@@ -79,6 +82,8 @@
       pos = $(this.canvas).position();
       x = e.clientX - pos.left;
       y = e.clientY - pos.top;
+      x *= 640 / $(window).width();
+      y *= 640 / $(window).width();
       if (this.isDrawing) {
         this.path.data.push([x, y]);
       }
@@ -111,6 +116,8 @@
         pos = $(this.canvas).position();
         x = touch.clientX - pos.left;
         y = touch.clientY - pos.top;
+        x *= 640 / $(window).width();
+        y *= 640 / $(window).width();
         if (this.isDrawing) {
           this.path.data.push([x, y]);
         }
