@@ -72,7 +72,7 @@ class_embedding = np.array(class_embedding)
 print(class_embedding.shape)
 
 
-# file_to_play = '../data/solo_sounds/cat.mp3'
+file_to_play = '../data/solo_sounds/cat.mp3'
 
 
 def callback(src, duration):
@@ -92,29 +92,33 @@ midi_in.callback = callback
 timestamp = 0
 
 while True:
+    try:
+        data = requests.get('http://smurakami.com:8888/data/timestamp.json').json()
+        timestamp_ = data['timestamp']
 
+        if timestamp != timestamp_:
 
-    data = requests.get('http://smurakami.com:8888/data/timestamp.json').json()
-    timestamp_ = data['timestamp']
+            paths = requests.get('http://smurakami.com:8888/data/paths.json').json()
 
-    if timestamp != timestamp_:
+            print('update ditected')
 
+            params = predict(paths)
+            params = params.reshape((12, 1, 1))
 
-        paths = get('http://smurakami.com:8888/data/paths.json').json()
+            draw_embedding = (params * class_embedding).sum(axis=0)[None, :, :]
 
+            dist = np.sqrt(((embedding_interp - draw_embedding) ** 2).sum(axis=2).sum(axis=1))
 
-        params = predict(paths)
+            index = np.argmin(dist)
+            print(index)
 
-        draw_embedding = (params * class_embedding).sum(axis=0)[None, :, :]
+            file_to_play = '../sounds/' + files_interp[index]
 
-        dist = np.sqrt(((embedding_interp - draw_embedding) ** 2).sum(axis=2).sum(axis=1))
+            timestamp = timestamp_
+    except:
+        print('some error request')
 
-        index = np.argmin(dist)
-        print(index)
-
-        file_to_play = '../sounds/' + files_interp[index]
-
-        time.sleep(0.5)
+    time.sleep(0.5)
 
     # message = input_port.get_message()
     # if message: print(message)
