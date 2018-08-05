@@ -34,10 +34,12 @@ def assets(filepath):
 def wave():
     paths = json.loads(request.params.get('data'))
 
-    json.dump(paths, open('../ui/data/paths.json', 'w'))
-    print(paths)
+    with open('../ui/data/paths.json', 'w') as file:
+        json.dump(paths, file)
+        print(paths)
 
-    json.dump({"timestamp": time.time()}, open('../ui/data/timestamp.json', 'w'))
+    with open('../ui/data/timestamp.json', 'w') as file:
+        json.dump({"timestamp": time.time()}, file)
 
     # params = predict(paths)
     # print(params)
