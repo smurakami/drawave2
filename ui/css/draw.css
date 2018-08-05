@@ -6,4 +6,10 @@
   border: 1px solid gray;
   margin-bottom: 8px; }
 
+#buttons .btn {
+  width: 40%;
+  padding: 40px;
+  font-size: 32px;
+  font-weight: bold; }
+
 /*# sourceMappingURL=draw.css.map */

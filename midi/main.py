@@ -89,6 +89,7 @@ midi_in.callback = callback
 
 while True:
     params = np.load('./params.npy').reshape((12, 1, 1))
+    print(params.reshape((12, )))
     draw_embedding = (params * class_embedding).sum(axis=0)[None, :, :]
 
     dist = np.sqrt(((embedding_interp - draw_embedding) ** 2).sum(axis=2).sum(axis=1))
@@ -98,7 +99,7 @@ while True:
 
     file_to_play = '../sounds/' + files_interp[index]
 
-    time.sleep(1.0)
+    time.sleep(0.1)
 
     # message = input_port.get_message()
     # if message: print(message)

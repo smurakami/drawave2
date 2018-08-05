@@ -33,8 +33,12 @@ class Main
     @mode = 'draw'
     $('#buttons .draw').click =>
       @mode = 'draw'
+
     $('#buttons .erase').click =>
-      @mode = 'erase'
+      @paths = []
+      @path = null
+      @draw()
+      # @mode = 'erase'
     $('#buttons .send').click =>
       @send()
 
@@ -43,11 +47,15 @@ class Main
     @isDrawing = true
     @path = new Path(@mode)
     @paths.push @path
+    e.preventDefault()
+    return false
 
   mouseup: (e) ->
     console.log('mouseup')
     @isDrawing = false
     @path = null
+    e.preventDefault()
+    return false
 
   mousemove: (e) ->
     pos = $(@canvas).position()
@@ -56,29 +64,42 @@ class Main
     if @isDrawing
       @path.data.push([x, y])
     @draw()
+    e.preventDefault()
+    return false
 
   touchstart: (e) ->
     console.log('touchstart')
     @isDrawing = true
     @path = new Path(@mode)
     @paths.push @path
+    e.preventDefault()
+    return false
 
   touchend: (e) ->
     console.log('touchend')
     @isDrawing = false
     @path = null
+    e.preventDefault()
+    return false
 
   touchmove: (e) ->
-    touch = e.touches[0];
-    pos = $(@canvas).position()
-    x = touch.clientX - pos.left
-    y = touch.clientY - pos.top
-    if @isDrawing
-      @path.data.push([x, y])
-    @draw()
+    try 
+      touch = e.touches[0];
+      pos = $(@canvas).position()
+      x = touch.clientX - pos.left
+      y = touch.clientY - pos.top
+      if @isDrawing
+        @path.data.push([x, y])
+      @draw()
+    catch
+      console.log('touchmove erro')
+    e.preventDefault()
+    return false
 
   draw: ->
     ctx = @context
+
+    ctx.clearRect(0, 0, 640, 640)
 
     for path in @paths
       if path.mode == 'draw'
@@ -112,5 +133,8 @@ class Main
 
 
 $ ->
+  $(window).on 'touchmove.noScroll', (e) -> 
+    e.preventDefault()
+
   window.main = new Main
 

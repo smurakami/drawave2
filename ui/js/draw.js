@@ -45,7 +45,9 @@
       })(this));
       $('#buttons .erase').click((function(_this) {
         return function() {
-          return _this.mode = 'erase';
+          _this.paths = [];
+          _this.path = null;
+          return _this.draw();
         };
       })(this));
       $('#buttons .send').click((function(_this) {
@@ -59,13 +61,17 @@
       console.log('mousedown');
       this.isDrawing = true;
       this.path = new Path(this.mode);
-      return this.paths.push(this.path);
+      this.paths.push(this.path);
+      e.preventDefault();
+      return false;
     };
 
     Main.prototype.mouseup = function(e) {
       console.log('mouseup');
       this.isDrawing = false;
-      return this.path = null;
+      this.path = null;
+      e.preventDefault();
+      return false;
     };
 
     Main.prototype.mousemove = function(e) {
@@ -76,37 +82,50 @@
       if (this.isDrawing) {
         this.path.data.push([x, y]);
       }
-      return this.draw();
+      this.draw();
+      e.preventDefault();
+      return false;
     };
 
     Main.prototype.touchstart = function(e) {
       console.log('touchstart');
       this.isDrawing = true;
       this.path = new Path(this.mode);
-      return this.paths.push(this.path);
+      this.paths.push(this.path);
+      e.preventDefault();
+      return false;
     };
 
     Main.prototype.touchend = function(e) {
       console.log('touchend');
       this.isDrawing = false;
-      return this.path = null;
+      this.path = null;
+      e.preventDefault();
+      return false;
     };
 
     Main.prototype.touchmove = function(e) {
       var pos, touch, x, y;
-      touch = e.touches[0];
-      pos = $(this.canvas).position();
-      x = touch.clientX - pos.left;
-      y = touch.clientY - pos.top;
-      if (this.isDrawing) {
-        this.path.data.push([x, y]);
+      try {
+        touch = e.touches[0];
+        pos = $(this.canvas).position();
+        x = touch.clientX - pos.left;
+        y = touch.clientY - pos.top;
+        if (this.isDrawing) {
+          this.path.data.push([x, y]);
+        }
+        this.draw();
+      } catch (error) {
+        console.log('touchmove erro');
       }
-      return this.draw();
+      e.preventDefault();
+      return false;
     };
 
     Main.prototype.draw = function() {
       var ctx, i, j, len, len1, path, point, ref, ref1, ref2, results, x, y;
       ctx = this.context;
+      ctx.clearRect(0, 0, 640, 640);
       ref = this.paths;
       results = [];
       for (i = 0, len = ref.length; i < len; i++) {
@@ -164,6 +183,9 @@
   })();
 
   $(function() {
+    $(window).on('touchmove.noScroll', function(e) {
+      return e.preventDefault();
+    });
     return window.main = new Main;
   });
 
