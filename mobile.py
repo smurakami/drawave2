@@ -6,10 +6,9 @@ import os
 import requests
 import sys
 
-# from predict import predict
+from predict import predict
 
 import numpy as np
-import time
 
 
 TEMPLATE_PATH.insert(0, os.path.abspath(os.path.dirname(__file__)))
@@ -34,10 +33,8 @@ def assets(filepath):
 def wave():
     paths = json.loads(request.params.get('data'))
 
-    json.dump(paths, open('../ui/data/paths.json', 'w'))
+    json.dump(paths, open('paths.json', 'w'))
     print(paths)
-
-    json.dump({"timestamp": time.time()}, open('../ui/data/timestamp.json', 'w'))
 
     # params = predict(paths)
     # print(params)
