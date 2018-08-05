@@ -1,11 +1,13 @@
-import rtmidi2
-
 import time
 import rtmidi2
+
+import requests
 
 import subprocess
 
 import numpy as np
+
+from predict import predict
 
 midi_in = rtmidi2.MidiIn()
 print(midi_in.ports)
@@ -87,19 +89,32 @@ def callback(src, duration):
 
 midi_in.callback = callback
 
+timestamp = 0
+
 while True:
-    params = np.load('./params.npy').reshape((12, 1, 1))
-    print(params.reshape((12, )))
-    draw_embedding = (params * class_embedding).sum(axis=0)[None, :, :]
 
-    dist = np.sqrt(((embedding_interp - draw_embedding) ** 2).sum(axis=2).sum(axis=1))
 
-    index = np.argmin(dist)
-    print(index)
+    data = requests.get('http://smurakami.com:8888/data/timestamp.json').json()
+    timestamp_ = data['timestamp']
 
-    file_to_play = '../sounds/' + files_interp[index]
+    if timestamp != timestamp_:
 
-    time.sleep(0.1)
+
+        paths = get('http://smurakami.com:8888/data/paths.json').json()
+
+
+        params = predict(paths)
+
+        draw_embedding = (params * class_embedding).sum(axis=0)[None, :, :]
+
+        dist = np.sqrt(((embedding_interp - draw_embedding) ** 2).sum(axis=2).sum(axis=1))
+
+        index = np.argmin(dist)
+        print(index)
+
+        file_to_play = '../sounds/' + files_interp[index]
+
+        time.sleep(0.5)
 
     # message = input_port.get_message()
     # if message: print(message)
