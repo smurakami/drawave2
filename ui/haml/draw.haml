@@ -12,15 +12,15 @@
     %link{:href => "css/bootstrap.min.css", :rel => "stylesheet"}/
     %link{:href => "css/draw.css", :rel => "stylesheet"}/
   %body
-    #main.container
+    #main
       %canvas#canvas{ width: 640, height: 640 }
       #buttons
         / .draw.btn.btn-primary
         /   DRAW
         .erase.btn.btn-danger
-          削除
+          クリア
         .send.btn.btn-success
-          解析
+          送信
 
     %script{:src => "js/jquery.min.js"}
     %script{:src => "js/popper.min.js"}
