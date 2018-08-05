@@ -116,6 +116,8 @@
         pos = $(this.canvas).position();
         x = touch.clientX - pos.left;
         y = touch.clientY - pos.top;
+        x *= 640 / $(window).width();
+        y *= 640 / $(window).width();
         if (this.isDrawing) {
           this.path.data.push([x, y]);
         }

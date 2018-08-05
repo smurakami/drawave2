@@ -94,8 +94,13 @@ class Main
     try 
       touch = e.touches[0];
       pos = $(@canvas).position()
+
       x = touch.clientX - pos.left
       y = touch.clientY - pos.top
+      
+      x *= 640 / $(window).width()
+      y *= 640 / $(window).width()
+
       if @isDrawing
         @path.data.push([x, y])
       @draw()
